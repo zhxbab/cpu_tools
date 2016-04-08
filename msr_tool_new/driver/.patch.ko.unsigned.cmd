@@ -1,0 +1,1 @@
+cmd_/media/Data_Linux/msr_tool/msr_tool_new/driver/patch.ko.unsigned := ld -r -m elf_x86_64 -T /usr/src/kernels/2.6.32-504.el6.x86_64/scripts/module-common.lds --build-id -o /media/Data_Linux/msr_tool/msr_tool_new/driver/patch.ko.unsigned /media/Data_Linux/msr_tool/msr_tool_new/driver/patch.o /media/Data_Linux/msr_tool/msr_tool_new/driver/patch.mod.o 

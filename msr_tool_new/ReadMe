@@ -1,0 +1,35 @@
+1.	Run "Make" Command in msr_tool directory to compile and load kernel module which is used for operating MSRs.  
+In fact, you can use insmod command to load kernel module only, but because of the different kernel version, 
+you'd better recompile this kernel module. Unload tool is used for unload this kernel module.
+2.	Update ucode
+Usage:		-p patch_file
+Example: 	./cpu_msr -p exe/patch.txt 
+3.	Read MSRs
+Usage: 		-rdmsr msrnumber -core [cpunumber] -edx [edx] -eax [eax] -edi [edi] -esi [esi]
+Example: 	./cpu_msr -rdmsr 186 							(read all core msr 0x186)
+		./cpu_msr -rdmsr 186 -core 0 						(read core 0 msr 0x186)
+		./cpu_msr -rdmsr 317a -edx 434600					(read all core msr 0x317a,this msr needs special edx value)
+4.	Write MSRs
+Usage:		-wrmsr msrnumber high32 low32 -core [cpunumber] -edi [edi] -esi [esi]
+Example: 	./cpu_msr -wrmsr 186 0 12345678 -core 0					(write core 0 msr 0x186, value is [0x0:0x12345678])
+		./cpu_msr -wrmsr 317f 0 2 -edi XXXXXXXX -esi XXXXXXXX -core 0		(write core 0 msr 0x317f, value is [0x0:0x2]. This msr needs passwd 												 which is in edi and esi)
+5.	Modify MSRs
+Usage:		-rmwmsr msrnumber SXX/RXX -core [cpunumber] -edx [edx] -eax [eax] -edi [edi] -esi [esi]
+Example:	./cpu_msr -rmwmsr 186 s0s1s2s3r4r5 -core 1       			(set bit0-3 and reset bit4-5 in core 1 msr 0x186)
+		./cpu_msr -rmwmsr 317f s2 -edi XXXXXXXX -esi XXXXXXXX -core 0		(set core 0 msr 0x317f bit2. This msr needs passwd which is in edi and 												 esi)
+6. 	I/O Space Read and Write
+Usage:		-ior io_address (size is 1 byte)
+		-iow io_address data (size is 1 byte)
+Example:	./cpu_msr -ior 80
+		./cpu_msr -iow 80 aa
+7. 	Physical Memory Read and Write(use /dev/mem, only support mem below 1M, MMIO and apic)
+Usage:		-memr mem_address (size is 4 byte)
+		-memw mem_address data (size is 1 byte)
+Example:	./cpu_msr -memr 0
+		./cpu_msr -memw 0 aa
+
+8. 	Physical Memory Read and Dump(use ring0 and access all mem)
+Usage:		-memread mem_address (size is 8 byte)
+		-memdump mem_address dump_size file_name (size unit is 1M byte)
+Example:	./cpu_msr -memread 0
+		./cpu_msr -memdump 0 1 dump_file
